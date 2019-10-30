@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Election.Model;
+using Election.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +14,24 @@ namespace Election
 {
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _dbContext;
+        public AccountController(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            await HttpContext.SignOutAsync();
             ViewData["ReturnUrl"] = returnUrl;
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Test()
+        {
+            return BadRequest();
+
         }
 
         public async Task<IActionResult> Logout()
@@ -30,39 +41,79 @@ namespace Election
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = "/")
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            if (LoginUser(model.userName))
+            /*
+            UserModel newUser = new UserModel
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, model.userName),
-                    new Claim(ClaimTypes.Role, model.role),
-                    new Claim("userId", "10"),
-                    new Claim("username", model.userName),
-                    new Claim("role", model.role)
-                };
-
-                var userIdentity = new ClaimsIdentity(claims, "user");
-
-                ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
-                await HttpContext.SignInAsync(principal);
-
-                //Just redirect to our index after logging in. 
-                return Redirect(returnUrl);
+                username = "test",
+                role = "supervisor",
+                province = 1,
+                district = 2,
+                election_center = 3
+            };
+            _dbContext.Accounts.Add(newUser);
+            _dbContext.SaveChanges();
+            */
+            
+            UserModel userModel = GetUser(model);
+            if (userModel == null)
+            {
+                ViewData["ErrorMessage"] = "Your login ID isn't correct. Please type your account ID correctly.";
+                return View();
             }
-            return View();
+
+            var claims = new List<Claim>
+            {
+                new Claim("username", userModel.username == null ? "" : userModel.username),
+                new Claim(ClaimTypes.Role, userModel.role),
+                new Claim("userId", "" + userModel.id),
+                new Claim("province", userModel.province == null ? "" : userModel.province),
+                new Claim("district", userModel.district == null ? "" : userModel.district),
+                new Claim("election_center", userModel.election_center == null ? "" : userModel.election_center)
+            };
+
+            var userIdentity = new ClaimsIdentity(claims, "user");
+
+            ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
+            await HttpContext.SignInAsync(principal);
+
+            if (returnUrl == null)
+            {
+                switch (userModel.role)
+                {
+                    case Global.ROLE_ADMIN:
+                        return Redirect("/");
+                    case Global.ROLE_STATEEMPOYER:
+                        return Redirect("/");
+                    case Global.ROLE_SUPERVISOR:
+                        return Redirect("/");
+                    case Global.ROLE_VOTER:
+                        return Redirect("/");
+                }
+            }
+            //Just redirect to our index after logging in. 
+            return Redirect(returnUrl);
         }
 
         public IActionResult AccessDenied()
         {
             return View();
         }
-        private bool LoginUser(string username)
+
+        // get user from login information
+        private UserModel GetUser(LoginViewModel model)
         {
-            //As an example. This method would go to our data store and validate that the combination is correct. 
-            //For now just return true. 
-            return true;
+            try
+            {
+                return _dbContext.Accounts.Where(s => s.userid == model.userid).First();
+
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
+            
         }
     }
 }

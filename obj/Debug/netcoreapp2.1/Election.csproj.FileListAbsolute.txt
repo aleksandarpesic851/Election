@@ -43,7 +43,6 @@ D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Election.RazorCoreGenerate.
 D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Account\Login.cshtml.g.cs
 D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Home\Index.cshtml.g.cs
 D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_Layout.cshtml.g.cs
-D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_MainMenu.cshtml.g.cs
 D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\_ViewStart.cshtml.g.cs
 D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Election.RazorTargetAssemblyInfo.cache
 D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Election.RazorTargetAssemblyInfo.cs
@@ -54,3 +53,7 @@ D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Election.csproj.CopyComplet
 D:\Web\ASP\Election\Election\bin\Debug\netcoreapp2.1\appsettings.json
 D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Shared\Error.cshtml.g.cs
 D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Account\AccessDenied.cshtml.g.cs
+D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_AdminMenu.cshtml.g.cs
+D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_StateEmployerMenu.cshtml.g.cs
+D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_SupervisorMenu.cshtml.g.cs
+D:\Web\ASP\Election\Election\obj\Debug\netcoreapp2.1\Razor\Views\Admin\Province.cshtml.g.cs

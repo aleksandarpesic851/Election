@@ -1,4 +1,4 @@
-using Election.Model;
+using Election.Models;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +9,7 @@ namespace Election
 {
     public class HomeController : Controller
     {
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = Global.ROLE_ADMIN)]
         public IActionResult Index()
         {
             var user = HttpContext.User;
