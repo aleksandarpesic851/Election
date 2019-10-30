@@ -1,5 +1,1 @@
 # Ignore compile objects
-.vs/
-.vscode/
-bin/
-obj/
