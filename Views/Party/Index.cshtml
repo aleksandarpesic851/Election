@@ -1,0 +1,173 @@
+﻿@using Election.Models.ViewModels
+@using Election.Models
+
+@model IEnumerable<PartyModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Politic Party";
+}
+
+<h2>Manage Politic Party</h2>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-success" style="margin-bottom:0px">
+            <div class="box-header">
+                <h3 class="box-title">Create Party</h3>
+                <form asp-action="Create" method="post"  enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <div class="row">
+                                <div class="col-xs-3 col-xs-offset-1">
+                                    <label for="logo_file">Logo Image: </label>
+                                    <input type="file" id="logo_file" name="logo_file" style="width: 100%" required accept="image/*" />
+                                </div>
+                                <div class="col-xs-3 col-xs-offset-1">
+                                    <label for="name">Name: </label>
+                                    <input id="name" name="name" placeholder="Party Name" style="width: 100%" required />
+                                </div>
+                                <div class="col-xs-3 col-xs-offset-1">
+                                    <label for="candidate">Candidate: </label>
+                                    <input id="candidate" name="candidate" placeholder="Candidate" style="width: 100%" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-2">
+                            <button type="submit" class="btn-outline-primary">Create</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="box-body">
+                <h3 class="box-title">Party List</h3>
+                <table class="table table-bordered table-striped" id="district-table">
+                    <thead>
+                        <tr>
+                            <th width="30%">Logo</th>
+                            <th width="25%">Name</th>
+                            <th width="25%">Candidate</th>
+                            <th style="width: 20%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="@item.logo" class="logo-image"/>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.candidate)
+                                </td>
+                                <td>
+                                    <a href="#" onclick="showUpdateDlg(@item.id, '@item.name', '@item.logo', '@item.candidate')">Edit</a> &nbsp;&nbsp;| &nbsp;&nbsp;
+                                    <a href="#" onclick="Delete(@item.id)">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-dialog-centered" tabindex="-1" role="dialog" id="update-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Update Province</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Update" method="post" enctype="multipart/form-data">
+                    <input id="update_id" name="id" type="hidden" />
+                    <input id="update_logo" name="logo" type="hidden" />
+                    <div class="row text-center">
+                        <img id="form_logo_image" src="" class="logo-image"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8 col-xs-offset-2">
+                            <label for="update_logo_file">Logo Image: </label>
+                            <input type="file" id="update_logo_file" name="logo_file" style="width: 100%" accept="image/*" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 col-xs-offset-2">
+                            <label for="update_name">Name: </label>
+                            <input id="update_name" name="name" placeholder="Party Name" style="width: 100%" required />
+                        </div>
+                        <div class="col-xs-3 col-xs-offset-2">
+                            <label for="update_candidate">Candidate: </label>
+                            <input id="update_candidate" name="candidate" placeholder="Candidate" style="width: 100%" required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 col-xs-offset-9 text-center">
+                            <button type="submit" class="btn-outline-primary">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- DataTables -->
+<script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+    $(function () {
+        $('#district-table').DataTable();
+
+        var errMsg = "@ViewData["errorMsg"]";
+        if (errMsg)
+            alert(errMsg);
+    });
+    function Delete(id){
+        var txt;
+        var r = confirm("Are you sure you want to Delete?");
+        if (r == true) {
+
+            $.ajax(
+            {
+                type: "POST",
+                url: '@Url.Action("Delete")',
+                data: {
+                    id: id
+                },
+                error: function (result) {
+                    alert("error");
+                },
+                success: function (result) {
+                    if (result == true) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert("There is a problem, Try Later!");
+                    }
+                }
+            });
+        }
+    }
+
+    function showUpdateDlg(id, name, logo, candidate) {
+        $("#update_id").val(id);
+        $("#update_logo").val(logo);
+        $("#update_name").val(name);
+        $("#update_candidate").val(candidate);
+        $("#form_logo_image").attr("src", logo);
+
+        $("#update-modal").modal();
+    }
+</script>

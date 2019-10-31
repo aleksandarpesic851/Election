@@ -18,7 +18,15 @@ namespace Election.Controllers
         }
         public IActionResult Index()
         {
-            return View(_dbContext.Provinces.ToList());
+            List<ProvinceModel> arrProvince = new List<ProvinceModel>();
+            try
+            {
+                arrProvince = _dbContext.Provinces.ToList();
+            }
+            catch
+            { 
+            }
+            return View(arrProvince);
         }
 
         [HttpPost]

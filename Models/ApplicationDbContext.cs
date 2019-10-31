@@ -17,6 +17,8 @@ namespace Election.Models
         public virtual DbSet<ElectionDistrictModel> Districts { get; set; }
         public virtual DbSet<ElectionCenterModel> ElectionCenters { get; set; }
         public virtual DbSet<UserModel> Accounts { get; set; }
+        public virtual DbSet<PartyModel> Parties { get; set; }
+        public virtual DbSet<ElectionDateModel> ElectionDates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -102,6 +104,40 @@ namespace Election.Models
                 entity.Property(e => e.election_center)
                     .HasColumnName("election_center")
                     .HasMaxLength(255);
+            });
+            builder.Entity<PartyModel>(entity =>
+            {
+                entity.ToTable("party");
+
+                entity.Property(e => e.id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.candidate)
+                    .HasColumnName("candidate")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.logo)
+                    .HasColumnName("logo")
+                    .HasMaxLength(500);
+            });
+
+            builder.Entity<ElectionDateModel>(entity =>
+            {
+                entity.ToTable("election_date");
+
+                entity.Property(e => e.start_time)
+                    .HasColumnName("start_time")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.end_time)
+                    .HasColumnName("end_time")
+                    .HasColumnType("datetime");
             });
         }
     }

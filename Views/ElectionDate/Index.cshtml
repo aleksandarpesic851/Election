@@ -1,0 +1,55 @@
+﻿@using Election.Models
+@model ElectionDateModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Election Date";
+}
+
+<h2>Manage Election Date</h2>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-success" style="margin-bottom:0px">
+            <div class="box-body">
+                <form asp-action="Update" method="post">
+                    <input type="hidden" asp-for="id" />
+                    <div class="row">
+                        <div class="col-xs-3 col-xs-offset-1">
+                            <label asp-for="start_time">Start: </label>
+                            <input type="datetime" asp-for="start_time" style="width: 100%" required />
+                        </div>
+                        <div class="col-xs-3 col-xs-offset-1">
+                            <label asp-for="end_time">End: </label>
+                            <input type="datetime" asp-for="end_time" style="width: 100%" required />
+                        </div>
+
+                        <div class="col-xs-3">
+                            <button type="submit" class="btn-outline-primary">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Date Time picker -->
+<link rel="stylesheet" href="~/bower_components/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+<script src="~/bower_components/moment/min/moment.min.js"></script>
+<script src="~/bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+<script>
+    $(function () {
+        $('#start_time').datetimepicker();
+        $('#end_time').datetimepicker();
+        
+        $("#start_time").on("dp.change", function (e) {
+            $('#end_time').data("DateTimePicker").minDate(e.date);
+        });
+        $("#end_time").on("dp.change", function (e) {
+            $('#start_time').data("DateTimePicker").maxDate(e.date);
+        });
+        
+    });
+</script>
