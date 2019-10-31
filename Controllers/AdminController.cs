@@ -17,27 +17,12 @@ namespace Election.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Province()
+        [HttpGet]
+        public IActionResult Index()
         {
             return View(_dbContext.Provinces.ToList());
         }
 
-        [HttpPost]
-        public bool Delete(int id)
-        {
-            try
-            {
-                ProvinceModel doctor = _dbContext.Provinces.Where(s => s.id == id).First();
-                _dbContext.Provinces.Remove(doctor);
-                _dbContext.SaveChanges();
-                return true;
-            }
-            catch (System.Exception)
-            {
-                return false;
-            }
-
-        }
 
     }
 }

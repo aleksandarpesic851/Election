@@ -14,7 +14,7 @@ namespace Election.Models
         {
         }
         public virtual DbSet<ProvinceModel> Provinces { get; set; }
-        public virtual DbSet<DistrictModel> Districts { get; set; }
+        public virtual DbSet<ElectionDistrictModel> Districts { get; set; }
         public virtual DbSet<ElectionCenterModel> ElectionCenters { get; set; }
         public virtual DbSet<UserModel> Accounts { get; set; }
 
@@ -33,7 +33,7 @@ namespace Election.Models
                     .HasColumnName("name")
                     .HasMaxLength(255);
             });
-            builder.Entity<DistrictModel>(entity =>
+            builder.Entity<ElectionDistrictModel>(entity =>
             {
                 entity.ToTable("district");
 

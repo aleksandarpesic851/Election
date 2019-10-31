@@ -68,9 +68,9 @@ namespace Election
                 new Claim("username", userModel.username == null ? "" : userModel.username),
                 new Claim(ClaimTypes.Role, userModel.role),
                 new Claim("userId", "" + userModel.id),
-                new Claim("province", userModel.province == null ? "" : userModel.province),
-                new Claim("district", userModel.district == null ? "" : userModel.district),
-                new Claim("election_center", userModel.election_center == null ? "" : userModel.election_center)
+                new Claim("province", "" + userModel.province),
+                new Claim("district", "" + userModel.district),
+                new Claim("election_center", "" + userModel.election_center)
             };
 
             var userIdentity = new ClaimsIdentity(claims, "user");

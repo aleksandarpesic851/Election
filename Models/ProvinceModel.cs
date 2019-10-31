@@ -8,10 +8,9 @@ namespace Election.Models
 {
     public class ProvinceModel
     {
-        [Required]
         public int id { get; set; }
         [Required]
-        [Display(Name = "Name")]
+        [Display(Name = "Province")]
         public string name { get; set; }
     }
 }

@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Election.Models.ProvinceModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Province";
+}
+
+<h2>Manage Province</h2>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-success" style="margin-bottom:0px">
+            <div class="box-header">
+                <h3 class="box-title">Create Province</h3>
+                <form asp-action="Create" method="post">
+                    <div class="row">
+                        <div class="col-xs-5 col-xs-offset-2">
+                            <input name="name" placeholder="Province Name" style="width: 100%" required />
+                        </div>
+                        <div class="col-xs-2 col-xs-offset-1 text-center">
+                            <button type="submit" class="btn-outline-primary">Create</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="box-body">
+                <h3 class="box-title">Province List</h3>
+                <table class="table table-bordered table-striped" id="province-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60%">
+                                @Html.DisplayNameFor(model => model.name)
+                            </th>
+                            <th style="width: 40%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                </td>
+                                <td>
+                                    <a href="#" onclick="showUpdateDlg(@item.id, '@item.name')">Edit</a> &nbsp;&nbsp;| &nbsp;&nbsp;
+                                    <a href="#" onclick="Delete(@item.id)">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-dialog-centered" tabindex="-1" role="dialog" id="update-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Update Province</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Update">
+                    <input id="update_id" name="id" type="hidden" />
+                    <div class="row">
+                        <div class="col-xs-5 col-xs-offset-2">
+                            <input id="update_name" name="name" placeholder="Province Name" style="width: 100%" required />
+                        </div>
+                        <div class="col-xs-2 col-xs-offset-1 text-center">
+                            <button type="submit" class="btn-outline-primary">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- DataTables -->
+<script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+    $(function () {
+        $('#province-table').DataTable();
+    });
+    function Delete(id){
+        var txt;
+        var r = confirm("Are you sure you want to Delete?");
+        if (r == true) {
+
+            $.ajax(
+            {
+                type: "POST",
+                url: '@Url.Action("Delete")',
+                data: {
+                    id: id
+                },
+                error: function (result) {
+                    alert("error");
+                },
+                success: function (result) {
+                    if (result == true) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert("There is a problem, Try Later!");
+                    }
+                }
+            });
+        }
+    }
+
+    function showUpdateDlg(id, name) {
+        $("#update_id").val(id);
+        $("#update_name").val(name);
+        $("#update-modal").modal();
+    }
+</script>
