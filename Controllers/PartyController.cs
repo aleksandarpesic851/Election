@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Election.Controllers
 {
+    [Authorize(Roles = Global.ROLE_ADMIN)]
     public class PartyController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
