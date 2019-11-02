@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Election.Models;
 using Election.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Election.Controllers

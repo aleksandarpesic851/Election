@@ -16,5 +16,11 @@ namespace Election.Models.ViewModels
 
         [Display(Name = "Province")]
         public string provinceName { get; set; }
+        public int partyId { get; set; }
+        public string partyLogo { get; set; }
+        [Display(Name = "Party")]
+        public string partyName { get; set; }
+        [Display(Name = "Candidate")]
+        public string partyCandidate { get; set; }
     }
 }

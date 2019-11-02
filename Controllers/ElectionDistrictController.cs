@@ -25,12 +25,21 @@ namespace Election.Controllers
                 List<ElectionDistrictModel> arrDistrict = _dbContext.Districts.ToList();
                 foreach (ElectionDistrictModel district in arrDistrict)
                 {
+                    PartyModel party = new PartyModel();
+                    if (district.party != null && district.party > 0)
+                    {
+                        party = _dbContext.Parties.Find(district.party);
+                    }
                     arrDisctrictViewModel.Add(new ElectionDistrictViewModel
                     {
                         id = district.id,
                         name = district.name,
                         provinceId = district.province,
-                        provinceName = _dbContext.Provinces.Find(district.province).name
+                        provinceName = _dbContext.Provinces.Find(district.province).name,
+                        partyId = party.id,
+                        partyName = party.name,
+                        partyLogo = party.logo,
+                        partyCandidate = party.candidate
                     });
                 }
             }
@@ -39,6 +48,7 @@ namespace Election.Controllers
                 return Ok(e.Message);
             }
             ViewData["provinces"] = _dbContext.Provinces.ToList();
+            ViewData["parties"] = _dbContext.Parties.ToList();
             ViewData["errorMsg"] = errorMsg;
             return View(arrDisctrictViewModel);
         }
@@ -57,7 +67,8 @@ namespace Election.Controllers
             ElectionDistrictModel electionDistrict = new ElectionDistrictModel()
             {
                 name = electionDistrictViewModel.name,
-                province = electionDistrictViewModel.provinceId
+                province = electionDistrictViewModel.provinceId,
+                party = electionDistrictViewModel.partyId
             };
             _dbContext.Districts.Add(electionDistrict);
             _dbContext.SaveChanges();
@@ -74,7 +85,8 @@ namespace Election.Controllers
             {
                 id = electionDistrictViewModel.id,
                 name = electionDistrictViewModel.name,
-                province = electionDistrictViewModel.provinceId
+                province = electionDistrictViewModel.provinceId,
+                party = electionDistrictViewModel.partyId
             };
             _dbContext.Districts.Update(electionDistrict);
 

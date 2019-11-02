@@ -7,9 +7,10 @@ using System.Diagnostics;
 
 namespace Election
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        [Authorize(Roles = Global.ROLE_ADMIN)]
+//        [Authorize(Roles = Global.ROLE_ADMIN)]
         public IActionResult Index()
         {
             var user = HttpContext.User;

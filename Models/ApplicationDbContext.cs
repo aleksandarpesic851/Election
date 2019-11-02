@@ -67,7 +67,16 @@ namespace Election.Models
 
                 entity.Property(e => e.district)
                     .HasColumnName("district")
-                    .HasMaxLength(255);
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.valid)
+                    .HasColumnName("valid")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.invalid)
+                    .HasColumnName("invalid")
+                    .HasColumnType("int(11)");
+
             });
             builder.Entity<UserModel>(entity =>
             {

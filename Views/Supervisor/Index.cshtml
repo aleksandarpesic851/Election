@@ -1,49 +1,41 @@
-﻿@using Election.Models.ViewModels
-@using Election.Models
-
-@model IEnumerable<ElectionDistrictViewModel>
+﻿@using Election.Models
+@model IEnumerable<UserModel>
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "Election District";
-    List<ProvinceModel> listProvinces = (List<ProvinceModel>)ViewData["provinces"];
-    List<SelectListItem> arrProvince = new List<SelectListItem>();
-    foreach (ProvinceModel province in listProvinces)
+    ViewData["Title"] = "Supervisor";
+    List<ElectionCenterModel> listCenters = (List<ElectionCenterModel>)ViewData["electionCenters"];
+    List<SelectListItem> arrCenters = new List<SelectListItem>();
+    foreach (ElectionCenterModel center in listCenters)
     {
-        arrProvince.Add(new SelectListItem(province.name, "" + province.id));
+        arrCenters.Add(new SelectListItem(center.name, "" + center.id));
     }
 
-    List<PartyModel> listParties = (List<PartyModel>)ViewData["parties"];
-    List<SelectListItem> arrParties = new List<SelectListItem>();
-    foreach (PartyModel party in listParties)
-    {
-        arrParties.Add(new SelectListItem(party.name, "" + party.id));
-    }
 
 }
 
-<h2>Manage Election District</h2>
+<h2>Manage Supervisor</h2>
 
 <div class="row">
     <div class="col-xs-12">
         <div class="box box-success" style="margin-bottom:0px">
             <div class="box-header">
-                <h3 class="box-title">Create Election District & State Employer</h3>
+                <h3 class="box-title">Create State Employer</h3>
                 <form asp-action="Create" method="post">
                     <div class="row">
                         <div class="col-xs-9">
                             <div class="row">
-                                <div class="col-xs-3">
-                                    <label for="province">Province: </label>
-                                    <select id="province" name="provinceId" asp-items="arrProvince" style="width: 100%" required></select>
+                                <div class="col-xs-3 col-xs-offset-1">
+                                    <label for="election_center">Election Center: </label>
+                                    <select id="election_center" name="election_center" asp-items="arrCenters" style="width: 100%" required></select>
                                 </div>
                                 <div class="col-xs-3 col-xs-offset-1">
-                                    <label for="partyId">Party: </label>
-                                    <select id="partyId" name="partyId" asp-items="arrParties" style="width: 100%" required></select>
+                                    <label for="userid">Supervisor ID: </label>
+                                    <input id="userid" name="userid" placeholder="Supervisor ID" title="This is used for login" style="width: 100%" required />
                                 </div>
                                 <div class="col-xs-3 col-xs-offset-1">
-                                    <label for="name">Election District: </label>
-                                    <input id="name" name="name" placeholder="Election District Name" style="width: 100%" required />
+                                    <label for="username">Supervisor Name: </label>
+                                    <input id="username" name="username" placeholder="Supervisor Name" style="width: 100%" required />
                                 </div>
                             </div>
                         </div>
@@ -56,43 +48,28 @@
             </div>
 
             <div class="box-body">
-                <h3 class="box-title">Election District List</h3>
+                <h3 class="box-title">State Employer List</h3>
                 <table class="table table-bordered table-striped" id="district-table">
                     <thead>
                         <tr>
-                            <th width="20%">
-                                @Html.DisplayNameFor(model => model.provinceName)
-                            </th>
-                            <th width="20%">
-                                @Html.DisplayNameFor(model => model.name)
-                            </th>
-                            <th width="20%">
-                                @Html.DisplayNameFor(model => model.partyName)
-                            </th>
-                            <th width="20%">
-                                @Html.DisplayNameFor(model => model.partyCandidate)
-                            </th>
-                            <th style="width: 20%">Action</th>
+                            <th width="40%">Election Center</th>
+                            <th width="40%">Name</th>
+                            <th width="20%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
+                            ElectionCenterModel CenterItem = listCenters.Where(d => d.id == item.election_center).First();
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.provinceName)
+                                @CenterItem.name
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.name)
+                                @Html.DisplayFor(modelItem => item.username)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.partyName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.partyCandidate)
-                            </td>
-                            <td>
-                                <a href="#" onclick="showUpdateDlg(@item.id, @item.provinceId, '@item.name', @item.partyId)">Edit</a> &nbsp;&nbsp;| &nbsp;&nbsp;
+                                <a href="#" onclick="showUpdateDlg(@item.id, '@item.userid', '@item.username', @item.election_center)">Edit</a> &nbsp;&nbsp;| &nbsp;&nbsp;
                                 <a href="#" onclick="Delete(@item.id)">Delete</a>
                             </td>
                         </tr>
@@ -116,21 +93,20 @@
             <div class="modal-body">
                 <form asp-action="Update" method="post">
                     <input id="update_id" name="id" type="hidden" />
-                    <input id="update_state_empoyer_id" name="stateEmployerid" type="hidden" />
                     <div class="row">
                         <div class="col-xs-9">
                             <div class="row">
-                                <div class="col-xs-3">
-                                    <label for="update_province">Province: </label>
-                                    <select id="update_province" name="provinceId" asp-items="arrProvince" style="width: 100%" required></select>
+                                <div class="col-xs-3 col-xs-offset-1">
+                                    <label for="update_election_center">Election Center: </label>
+                                    <select id="update_election_center" name="election_center" asp-items="arrCenters" style="width: 100%" required></select>
                                 </div>
                                 <div class="col-xs-3 col-xs-offset-1">
-                                    <label for="update_partyId">Party: </label>
-                                    <select id="update_partyId" name="partyId" asp-items="arrParties" style="width: 100%" required></select>
+                                    <label for="update_userid">Supervisor ID: </label>
+                                    <input id="update_userid" name="userid" placeholder="Supervisor ID" title="This is used for login" style="width: 100%" required />
                                 </div>
                                 <div class="col-xs-3 col-xs-offset-1">
-                                    <label for="update_name">District: </label>
-                                    <input id="update_name" name="name" placeholder="Election District Name" style="width: 100%" required />
+                                    <label for="update_username">Supervisor Name: </label>
+                                    <input id="update_username" name="username" placeholder="Supervisor Name" style="width: 100%" required />
                                 </div>
                             </div>
                         </div>
@@ -151,12 +127,14 @@
 <script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 
 <script>
+
     $(function () {
         $('#district-table').DataTable();
 
         var errMsg = "@ViewData["errorMsg"]";
         if (errMsg)
             alert(errMsg);
+        updateDistrict();
     });
     function Delete(id){
         var txt;
@@ -185,12 +163,12 @@
         }
     }
 
-    function showUpdateDlg(id, province, name, party) {
+    function showUpdateDlg(id, userid, username, electionCenterid) {
         $("#update_id").val(id);
-        $("#update_province").val(province);
-        $("#update_name").val(name);
-        $("#update_partyId").val(party);
-
+        $("#update_userid").val(userid);
+        $("#update_username").val(username);
+        $("#update_election_center").val(electionCenterid);
         $("#update-modal").modal();
     }
+
 </script>

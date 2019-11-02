@@ -8,62 +8,70 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Election.Controllers
 {
-    [Authorize(Roles = Global.ROLE_ADMIN)]
-    public class StateEmployerController : Controller
+    [Authorize(Roles = Global.ROLE_STATEEMPOYER)]
+    public class SupervisorController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
-        public StateEmployerController(ApplicationDbContext dbContext)
+        public SupervisorController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         public IActionResult Index(string errorMsg)
         {
+            int responsableDistrictId = Convert.ToInt32(User.FindFirst("district").Value.ToString());
+            
             List<UserModel> arrUsers = new List<UserModel>();
             
             try
             {
-                // Get all users who is State Emploer
-                arrUsers = _dbContext.Accounts.Where(d=>d.district > 0).ToList();
+                List<ElectionCenterModel> arrElectionCenters = _dbContext.ElectionCenters.Where(e => e.district == responsableDistrictId).ToList();
+                List<int> arrCenterIds = new List<int>();
+                foreach(ElectionCenterModel element in arrElectionCenters)
+                {
+                    arrCenterIds.Add(element.id);
+                }
+                // Get all users who is supervisor in this district
+                arrUsers = _dbContext.Accounts.Where(d=> arrCenterIds.Contains(Convert.ToInt32(d.election_center))).ToList();
             }
             catch (Exception e)
             {
                 return Ok(e.Message);
             }
-            ViewData["provinces"] = _dbContext.Provinces.ToList();
-            ViewData["districts"] = _dbContext.Districts.ToList();
+            //get resposable election centers
+            ViewData["electionCenters"] = _dbContext.ElectionCenters.Where(e=>e.district == responsableDistrictId).ToList();
             ViewData["errorMsg"] = errorMsg;
             return View(arrUsers);
         }
 
 
         [HttpPost]
-        public IActionResult Create(UserModel stateEmpoyer)
+        public IActionResult Create(UserModel supervisor)
         {
             
             //if there is an account with this id, send error message.
-            if (_dbContext.Accounts.Count(d => d.userid == stateEmpoyer.userid) > 0)
+            if (_dbContext.Accounts.Count(d => d.userid == supervisor.userid) > 0)
             {
                 return RedirectToAction("index", new { errorMsg = "There is an account with this id. please try again with other id" } );
             }
-            stateEmpoyer.role = Global.ROLE_STATEEMPOYER;
-            _dbContext.Accounts.Add(stateEmpoyer);
+            supervisor.role = Global.ROLE_SUPERVISOR;
+            _dbContext.Accounts.Add(supervisor);
             _dbContext.SaveChanges();
 
-            return Redirect("/StateEmployer/Index");
+            return Redirect("/Supervisor/Index");
 
         }
 
 
         [HttpPost]
-        public IActionResult Update(UserModel stateEmpoyer)
+        public IActionResult Update(UserModel supervisor)
         {
 
-            stateEmpoyer.role = Global.ROLE_STATEEMPOYER;
-            _dbContext.Accounts.Update(stateEmpoyer);
+            supervisor.role = Global.ROLE_SUPERVISOR;
+            _dbContext.Accounts.Update(supervisor);
             _dbContext.SaveChanges();
 
-            return Redirect("/StateEmployer/Index");
+            return Redirect("/Supervisor/Index");
 
         }
 

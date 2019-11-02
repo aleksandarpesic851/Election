@@ -9,6 +9,8 @@ namespace Election.Models
     {
         public int id { get; set; }
         public string name { get; set; }
-        public string district { get; set; }
+        public int? district { get; set; }
+        public int? valid { get; set; }
+        public int? invalid { get; set; }
     }
 }
