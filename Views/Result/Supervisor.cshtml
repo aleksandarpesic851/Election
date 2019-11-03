@@ -1,0 +1,90 @@
+﻿@using Election.Models
+@model IEnumerable<VoterModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Voters";
+}
+
+<h2>Voters in @ViewData["center"], @ViewData["district"]</h2>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-success" style="margin-bottom:0px">
+
+            <div class="box-body">
+                <h3 class="box-title">Voter List</h3>
+                <table class="table table-bordered table-striped" id="district-table">
+                    <thead>
+                        <tr>
+                            <th width="25%">Name</th>
+                            <th width="25%">NIC</th>
+                            <th width="25%">Addres</th>
+                            <th width="25%" title="If checked, a voter can do election">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.username)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.nic)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.address)
+                            </td>
+                            <td  title="If checked, a voter can do election">
+                                @if (item.vote_state != 0)
+                                {
+                                    <input type="checkbox" checked onchange="updateVoterState('@item.userid', @item.district, this.checked)">
+                                }
+                                else 
+                                {
+                                    <input type="checkbox" onchange="updateVoterState('@item.userid', @item.district, this.checked)">
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+    $(function () {
+        $('#district-table').DataTable();
+    });
+
+    function updateVoterState(userid, district, checked) {
+        let updateData = {
+            "userid": userid,
+            "district": district,
+            "state": checked ? 1 : 0
+        };
+
+        $.ajax(
+            {
+                type: "POST",
+                url: '@Url.Action("VoterCheckin")',
+                data: JSON.stringify(updateData),
+                contentType: 'application/json; charset=utf-8',
+                error: function (result) {
+                    console.log("error response");
+                },
+                success: function (result) {
+                    if (!result) {
+                        console.log("checkin fail");
+                    }
+                }
+            });
+    }
+</script>

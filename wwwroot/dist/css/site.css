@@ -4,3 +4,28 @@
     display: block;
     margin: auto;
 }
+
+.logo-lg-image {
+    width: 200px;
+    height: 200px;
+    display: block;
+    margin: auto;
+}
+
+.voter-print-image {
+    width: 190px;
+    display: block;
+}
+
+.result-div {
+    border: 1px solid #808080;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.vote-button {
+    max-width: 70px;
+    display: block;
+    margin: auto;
+    cursor: pointer
+}

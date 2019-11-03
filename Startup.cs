@@ -52,7 +52,7 @@ namespace Election
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Result}/{action=Index}/{id?}");
             });
         }
     }
