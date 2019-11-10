@@ -1,10 +1,7 @@
-﻿<ul class="sidebar-menu" data-widget="tree">
-    <li class="header">HEADER</li>
-    <!-- Optionally, you can add icons to the links -->
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Result" ? "active" : "")"><a href="/Result/Admin"><i class="fa fa-link"></i> <span>Election Result</span></a></li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Province" ? "active" : "")"><a href="/Province/Index"><i class="fa fa-link"></i> <span>Province</span></a></li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ElectionDistrict" ? "active" : "")"><a href="/ElectionDistrict/Index"><i class="fa fa-link"></i> <span>Election District</span></a></li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "StateEmployer" ? "active" : "")"><a href="/StateEmployer/Index"><i class="fa fa-link"></i> <span>State Employer</span></a></li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Party" ? "active" : "")"><a href="/Party/Index"><i class="fa fa-link"></i> <span>Politic Party</span></a></li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ElectionDate" ? "active" : "")"><a href="/ElectionDate/Index"><i class="fa fa-link"></i> <span>Election Date</span></a></li>
-</ul>
+﻿<!-- Optionally, you can add icons to the links -->
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Result" ? "active" : "")"><a href="/Result/Admin"><i class="fa fa-link"></i> <span>Election Result</span></a></li>
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Province" ? "active" : "")"><a href="/Province/Index"><i class="fa fa-link"></i> <span>Province</span></a></li>
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ElectionDistrict" ? "active" : "")"><a href="/ElectionDistrict/Index"><i class="fa fa-link"></i> <span>Election District</span></a></li>
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "StateEmployer" ? "active" : "")"><a href="/StateEmployer/Index"><i class="fa fa-link"></i> <span>State Employer</span></a></li>
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Party" ? "active" : "")"><a href="/Party/Index"><i class="fa fa-link"></i> <span>Politic Party</span></a></li>
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ElectionDate" ? "active" : "")"><a href="/ElectionDate/Index"><i class="fa fa-link"></i> <span>Election Date</span></a></li>

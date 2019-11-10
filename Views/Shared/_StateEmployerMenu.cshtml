@@ -1,8 +1,5 @@
-﻿<ul class="sidebar-menu" data-widget="tree">
-    <li class="header">HEADER</li>
-    <!-- Optionally, you can add icons to the links -->
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Result" ? "active" : "")"><a href="/Result/StateEmployer"><i class="fa fa-link"></i> <span>Election Result</span></a></li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ElectionCenter" ? "active" : "")"><a href="/ElectionCenter/Index"><i class="fa fa-link"></i> <span>Election Center</span></a></li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Supervisor" ? "active" : "")"><a href="/Supervisor/Index"><i class="fa fa-link"></i> <span>Supervisor</span></a></li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Census" ? "active" : "")"><a href="/Census/Index"><i class="fa fa-link"></i> <span>Census</span></a></li>
-</ul>
+﻿<!-- Optionally, you can add icons to the links -->
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Result" ? "active" : "")"><a href="/Result/StateEmployer"><i class="fa fa-link"></i> <span>Election Result</span></a></li>
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ElectionCenter" ? "active" : "")"><a href="/ElectionCenter/Index"><i class="fa fa-link"></i> <span>Election Center</span></a></li>
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Supervisor" ? "active" : "")"><a href="/Supervisor/Index"><i class="fa fa-link"></i> <span>Supervisor</span></a></li>
+<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Census" ? "active" : "")"><a href="/Census/Index"><i class="fa fa-link"></i> <span>Census</span></a></li>

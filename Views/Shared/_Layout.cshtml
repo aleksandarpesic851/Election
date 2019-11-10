@@ -117,21 +117,24 @@
     -->
           <!-- /.search form -->
           <!-- Sidebar Menu -->
-          @{
-              if (User.IsInRole(Global.ROLE_ADMIN))
-              {
-                  await Html.RenderPartialAsync("_AdminMenu");
+          <ul class="sidebar-menu" data-widget="tree">
+              <li class="header" style="color:#3c8dbc">@await Component.InvokeAsync("Account")</li>
+              @{
+                  if (User.IsInRole(Global.ROLE_ADMIN))
+                  {
+                      await Html.RenderPartialAsync("_AdminMenu");
+                  }
+                  else if (User.IsInRole(Global.ROLE_STATEEMPOYER))
+                  {
+                      await Html.RenderPartialAsync("_StateEmployerMenu");
+                  }
+                  else if (User.IsInRole(Global.ROLE_SUPERVISOR))
+                  {
+                      await Html.RenderPartialAsync("_SupervisorMenu");
+                  }
               }
-              else if (User.IsInRole(Global.ROLE_STATEEMPOYER))
-              {
-                  await Html.RenderPartialAsync("_StateEmployerMenu");
-              }
-              else if (User.IsInRole(Global.ROLE_SUPERVISOR))
-              {
-                  await Html.RenderPartialAsync("_SupervisorMenu");
-              }
-          }
-          <!-- /.sidebar-menu -->
+          </ul>
+              <!-- /.sidebar-menu -->
       </section>
     <!-- /.sidebar -->
   </aside>
