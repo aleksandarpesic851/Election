@@ -1,38 +1,68 @@
-﻿@using Election.Models
-
-@model VoteResult
+﻿@using Election.Models.ViewModels
+@model IEnumerable<PartyResultViewModel>
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "Result";
-    float percentage = Model.registerdVoter == 0 ? 0 : Model.vote * 100 / (float)Model.registerdVoter;
+    ViewData["Title"] = "Election Results";
 }
 
-<h2>Election Result in @ViewData["districtName"]</h2>
+<h2>Election Results</h2>
 
 <div class="row">
     <div class="col-xs-12">
         <div class="box box-success" style="margin-bottom:0px">
+
             <div class="box-body">
-                <div class="row">
-                    <div class="col-xs-2 result-div" style="margin-left: 5%">
-                        <h4>Votes(%):</h4>
-                        @percentage
-                    </div>
-                    <div class="col-xs-2 col-xs-offset-1 result-div">
-                        <h4>Registered Voter:</h4>
-                        @Html.DisplayFor(modelItem => modelItem.registerdVoter)
-                    </div>
-                    <div class="col-xs-2 col-xs-offset-1 result-div">
-                        <h4>Votes:</h4>
-                        @Html.DisplayFor(modelItem => modelItem.vote)
-                    </div>
-                    <div class="col-xs-2 col-xs-offset-1 result-div">
-                        <h4>Not Votes:</h4>
-                        @Html.DisplayFor(modelItem => modelItem.not_vote)
-                    </div>
-                </div>
+                <h3 class="box-title">State Employer List</h3>
+                <table class="table table-bordered table-striped" id="district-table">
+                    <thead>
+                        <tr>
+                            <th width="15%">Party</th>
+                            <th width="15%">Candidate</th>
+                            <th width="15%">Logo</th>
+                            <th width="15%">Votes</th>
+                            <th width="15%">Registered Voters</th>
+                            <th width="10%" style="background: #0094ff">Votes(%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.candidate)
+                                </td>
+
+                                <td>
+                                    <img src="@item.logo" class="logo-image" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vote)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.registerdVoter)
+                                </td>
+                                <td style="background: #0094ff">
+                                    @Html.DisplayFor(modelItem => item.percent)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+
+<!-- DataTables -->
+<script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+    $(function () {
+        $('#district-table').DataTable();
+    });
+</script>

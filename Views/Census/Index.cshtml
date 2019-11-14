@@ -120,29 +120,33 @@
         </div>
     </div>
 </div>
-
-<div id="printContent" style="display: none" class="row">
-    <div class="col-xs-8 col-xs-offset-2">
-        <h1>VOTER Resistration</h1>
-        <div>
-            <strong>Name : </strong>
-            <span id="voter_name">name</span>
+<div style="position: fixed; z-index: -1; top: 0; left: 0">
+    <div id="printContent" class="row">
+        <div class="col-xs-4">
+            <img src="~/dist/img/voter_mark.png" class="voter-print-image" />
         </div>
-        <div>
-            <strong>NIC : </strong>
-            <span id="voter_nic">NIC</span>
-        </div>
-        <div>
-            <strong>Secret ID : </strong>
-            <span id="voter_userid">id</span>
-        </div>
-        <div>
-            <strong>Address : </strong>
-            <span id="voter_address">address</span>
-        </div>
-        <div>
-            <strong>District : </strong>
-            <span id="voter_district">district</span>
+        <div class="col-xs-8">
+            <h1>VOTER Resistration</h1>
+            <div>
+                <strong>Name : </strong>
+                <span id="voter_name">name</span>
+            </div>
+            <div>
+                <strong>NIC : </strong>
+                <span id="voter_nic">NIC</span>
+            </div>
+            <div>
+                <strong>Secret ID : </strong>
+                <span id="voter_userid">id</span>
+            </div>
+            <div>
+                <strong>Address : </strong>
+                <span id="voter_address">address</span>
+            </div>
+            <div>
+                <strong>District : </strong>
+                <span id="voter_district">district</span>
+            </div>
         </div>
     </div>
 </div>
@@ -153,7 +157,7 @@
 
 <!-- JS PDF-->
 <script src="~/jsPDF/jspdf.min.js"></script>
-
+<script src="~/jsPDF/html2canvas.min.js"></script>
 <script>
 
     $(function () {
@@ -204,14 +208,14 @@
 
         $("#update-modal").modal();
     }
-
+    /*
     $('#print').click(function () {
         doc.fromHTML($('#printContent').html(), 15, 15, {
             'width': 170
         });
         doc.save('voter.pdf');
     });
-
+    */
     function print(name, nic, userid, address, district) {
         $('#voter_name').html(name);
         $('#voter_nic').html(nic);
@@ -219,12 +223,21 @@
         $('#voter_address').html(address);
         $('#voter_district').html(district);
 
-
+        /*
         var doc = new jsPDF();
         doc.fromHTML($('#printContent').html(), 15, 15, {
             'width': 170
         });
         doc.save('voter_' + name + '.pdf');
+        */
+
+        const filename  = 'voter_' + name + '.pdf';
+		html2canvas(document.querySelector('#printContent')).then(canvas => {
+			let pdf = new jsPDF('p', 'pt', [ 595.28,  841.89]);
+			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 450, 150);
+			pdf.save(filename);
+        });
+
     }
     /*
     function print() {

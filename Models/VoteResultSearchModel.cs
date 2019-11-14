@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace Election.Models
 {
-    public class Vote_Model
+    public class VoteResultSearchModel
     {
-        public string userid { get; set; }
-        public int district { get; set; }
-        public int state { get; set; }
+        public List<int> arrDistricts { get; set; }
         public int party { get; set; }
     }
 }

@@ -25,21 +25,12 @@ namespace Election.Controllers
                 List<ElectionDistrictModel> arrDistrict = _dbContext.Districts.ToList();
                 foreach (ElectionDistrictModel district in arrDistrict)
                 {
-                    PartyModel party = new PartyModel();
-                    if (district.party != null && district.party > 0)
-                    {
-                        party = _dbContext.Parties.Find(district.party);
-                    }
                     arrDisctrictViewModel.Add(new ElectionDistrictViewModel
                     {
                         id = district.id,
                         name = district.name,
                         provinceId = district.province,
-                        provinceName = _dbContext.Provinces.Find(district.province).name,
-                        partyId = party.id,
-                        partyName = party.name,
-                        partyLogo = party.logo,
-                        partyCandidate = party.candidate
+                        provinceName = _dbContext.Provinces.Find(district.province).name
                     });
                 }
             }
@@ -67,8 +58,7 @@ namespace Election.Controllers
             ElectionDistrictModel electionDistrict = new ElectionDistrictModel()
             {
                 name = electionDistrictViewModel.name,
-                province = electionDistrictViewModel.provinceId,
-                party = electionDistrictViewModel.partyId
+                province = electionDistrictViewModel.provinceId
             };
             _dbContext.Districts.Add(electionDistrict);
             _dbContext.SaveChanges();
@@ -85,8 +75,7 @@ namespace Election.Controllers
             {
                 id = electionDistrictViewModel.id,
                 name = electionDistrictViewModel.name,
-                province = electionDistrictViewModel.provinceId,
-                party = electionDistrictViewModel.partyId
+                province = electionDistrictViewModel.provinceId
             };
             _dbContext.Districts.Update(electionDistrict);
 

@@ -13,8 +13,8 @@
 }
 
 .voter-print-image {
-    width: 190px;
-    display: block;
+    width: 100px;
+    margin: 20px;
 }
 
 .result-div {

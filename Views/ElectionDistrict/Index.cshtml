@@ -12,14 +12,6 @@
     {
         arrProvince.Add(new SelectListItem(province.name, "" + province.id));
     }
-
-    List<PartyModel> listParties = (List<PartyModel>)ViewData["parties"];
-    List<SelectListItem> arrParties = new List<SelectListItem>();
-    foreach (PartyModel party in listParties)
-    {
-        arrParties.Add(new SelectListItem(party.name, "" + party.id));
-    }
-
 }
 
 <h2>Manage Election District</h2>
@@ -33,15 +25,11 @@
                     <div class="row">
                         <div class="col-xs-9">
                             <div class="row">
-                                <div class="col-xs-3">
+                                <div class="col-xs-5">
                                     <label for="province">Province: </label>
                                     <select id="province" name="provinceId" asp-items="arrProvince" style="width: 100%" required></select>
                                 </div>
-                                <div class="col-xs-3 col-xs-offset-1">
-                                    <label for="partyId">Party: </label>
-                                    <select id="partyId" name="partyId" asp-items="arrParties" style="width: 100%" required></select>
-                                </div>
-                                <div class="col-xs-3 col-xs-offset-1">
+                                <div class="col-xs-5 col-xs-offset-1">
                                     <label for="name">Election District: </label>
                                     <input id="name" name="name" placeholder="Election District Name" style="width: 100%" required />
                                 </div>
@@ -60,17 +48,11 @@
                 <table class="table table-bordered table-striped" id="district-table">
                     <thead>
                         <tr>
-                            <th width="20%">
+                            <th width="40%">
                                 @Html.DisplayNameFor(model => model.provinceName)
                             </th>
-                            <th width="20%">
+                            <th width="40%">
                                 @Html.DisplayNameFor(model => model.name)
-                            </th>
-                            <th width="20%">
-                                @Html.DisplayNameFor(model => model.partyName)
-                            </th>
-                            <th width="20%">
-                                @Html.DisplayNameFor(model => model.partyCandidate)
                             </th>
                             <th style="width: 20%">Action</th>
                         </tr>
@@ -86,13 +68,7 @@
                                 @Html.DisplayFor(modelItem => item.name)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.partyName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.partyCandidate)
-                            </td>
-                            <td>
-                                <a href="#" onclick="showUpdateDlg(@item.id, @item.provinceId, '@item.name', @item.partyId)">Edit</a> &nbsp;&nbsp;| &nbsp;&nbsp;
+                                <a href="#" onclick="showUpdateDlg(@item.id, @item.provinceId, '@item.name')">Edit</a> &nbsp;&nbsp;| &nbsp;&nbsp;
                                 <a href="#" onclick="Delete(@item.id)">Delete</a>
                             </td>
                         </tr>
@@ -120,15 +96,11 @@
                     <div class="row">
                         <div class="col-xs-9">
                             <div class="row">
-                                <div class="col-xs-3">
+                                <div class="col-xs-5">
                                     <label for="update_province">Province: </label>
                                     <select id="update_province" name="provinceId" asp-items="arrProvince" style="width: 100%" required></select>
                                 </div>
-                                <div class="col-xs-3 col-xs-offset-1">
-                                    <label for="update_partyId">Party: </label>
-                                    <select id="update_partyId" name="partyId" asp-items="arrParties" style="width: 100%" required></select>
-                                </div>
-                                <div class="col-xs-3 col-xs-offset-1">
+                                <div class="col-xs-5 col-xs-offset-1">
                                     <label for="update_name">District: </label>
                                     <input id="update_name" name="name" placeholder="Election District Name" style="width: 100%" required />
                                 </div>
@@ -185,11 +157,10 @@
         }
     }
 
-    function showUpdateDlg(id, province, name, party) {
+    function showUpdateDlg(id, province, name) {
         $("#update_id").val(id);
         $("#update_province").val(province);
         $("#update_name").val(name);
-        $("#update_partyId").val(party);
 
         $("#update-modal").modal();
     }

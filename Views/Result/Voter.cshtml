@@ -1,6 +1,6 @@
-﻿@using Election.Models
+﻿@using Election.Models.ViewModels
 
-@model VoterModel
+@model VoteViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -15,48 +15,68 @@
             <div class="box-header" style="padding: 40px">
                 <div class="row">
                     <div class="col-xs-3 col-xs-offset-1">
-                        <strong>Name : </strong>@Model.username
+                        <strong>Name : </strong>@Model.voter.username
                     </div>
                     <div class="col-xs-3 col-xs-offset-1">
-                        <strong>NIC : </strong>@Model.nic
+                        <strong>NIC : </strong>@Model.voter.nic
                     </div>
                     <div class="col-xs-3 col-xs-offset-1">
-                        <strong>Address : </strong>@Model.address
+                        <strong>Address : </strong>@Model.voter.address
                     </div>
                     <div class="col-xs-3 col-xs-offset-1">
-                        <strong>Province : </strong>@ViewData["province"]
+                        <strong>Province : </strong>@Model.province
                     </div>
                     <div class="col-xs-3 col-xs-offset-1">
-                        <strong>District : </strong>@ViewData["district"]
+                        <strong>District : </strong>@Model.district
                     </div>
                 </div>
             </div>
             <div class="box-body" style="padding-top: 50px; border-top: 1px solid #eee">
                 <div class="row">
-                    <div class="col-xs-2 col-xs-offset-2">
-                        <img src="~/dist/img/disagree.png" class="img-responsive vote-button" onclick="vote(2)" />
-                    </div>
-                    <div class="col-xs-4">
-                        <div class="row text-center">
-                            <img src="@ViewData["partyLogo"]" class="img-responsive logo-lg-image" />
-                        </div>
-                        <div class="row text-center">
-                            <strong>Party:</strong>@ViewData["partyName"] <br />
-                            <strong>Candidate:</strong>@ViewData["partyCandidate"] <br />
-                        </div>
-                    </div>
-                    <div class="col-xs-2">
-                        <img src="~/dist/img/agree.png" class="img-responsive vote-button" onclick="vote(3)" />
-                    </div>
+                    <table class="table table-bordered table-striped" id="district-table">
+                        <thead>
+                            <tr>
+                                <th width="30%">Logo</th>
+                                <th width="25%">Name</th>
+                                <th width="25%">Candidate</th>
+                                <th style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.arrPary)
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="@item.logo" class="logo-image" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.candidate)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" onchange="vote('@item.id')">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
+<!-- DataTables -->
+<script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+
 <script>
 
-    function vote(state) {
+    function vote(party) {
         if (!confirm("Are you sure?")) {
             return;
         }
@@ -65,7 +85,7 @@
                 type: "POST",
                 url: '@Url.Action("Vote")',
                 data: {
-                    state: state
+                    party: party
                 },
                 error: function (result) {
                     alert("error");

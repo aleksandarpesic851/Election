@@ -39,9 +39,15 @@ namespace Election.Controllers
         public async Task<IActionResult> Admin()
         {
             List<PartyModel> arrParties = _dbContext.Parties.ToList();
-            List<ElectionDistrictModel> arrDistricts = _dbContext.Districts.ToList();
+            List<ElectionDistrictModel> arrDistrictsModel = _dbContext.Districts.ToList();
             List<PartyResultViewModel> arrResults = new List<PartyResultViewModel>();
             VoterApiClient client = new VoterApiClient();
+
+            List<int> arrDistricts = new List<int>();
+            foreach(ElectionDistrictModel district in arrDistrictsModel)
+            {
+                arrDistricts.Add(district.id);
+            }
 
             foreach (PartyModel party in arrParties)
             {
@@ -50,21 +56,20 @@ namespace Election.Controllers
                 partyResult.logo = party.logo;
                 partyResult.candidate = party.candidate;
 
-                foreach (ElectionDistrictModel district in arrDistricts)
+                VoteResultSearchModel searchModel = new VoteResultSearchModel
                 {
-                    if (district.party != party.id)
-                        continue;
-                    //get district result
-                    Message<VoteResult> response = await client.GetResult(district.id);
+                    arrDistricts = arrDistricts,
+                    party = party.id
+                };
+                Message<VoteResult> response = await client.GetResult(searchModel);
 
-                    if (response.IsSuccess)
-                    {
-                        VoteResult results = (VoteResult)response.Data;
-                        partyResult.registerdVoter += results.registerdVoter;
-                        partyResult.vote += results.vote;
-                        partyResult.not_vote += results.not_vote;
-                    }
+                if (response.IsSuccess)
+                {
+                    VoteResult results = (VoteResult)response.Data;
+                    partyResult.registerdVoter = results.registerdVoter;
+                    partyResult.vote = results.vote;
                 }
+
                 //calculate percent
                 if (partyResult.registerdVoter != 0)
                     partyResult.percent = partyResult.vote * 100 / (float)partyResult.registerdVoter;
@@ -79,17 +84,42 @@ namespace Election.Controllers
         public async Task<IActionResult> StateEmployer()
         {
             int district = Convert.ToInt32(User.FindFirst("district").Value);
+            List<PartyModel> arrParties = _dbContext.Parties.ToList();
+            List<PartyResultViewModel> arrResults = new List<PartyResultViewModel>();
             VoterApiClient client = new VoterApiClient();
-            Message<VoteResult> response = await client.GetResult(district);
 
-            VoteResult results = new VoteResult();
-            if (response.IsSuccess)
+            List<int> arrDistricts = new List<int>();
+            arrDistricts.Add(district);
+
+            foreach (PartyModel party in arrParties)
             {
-                results = (VoteResult)response.Data;
-            }
-            ViewData["districtName"] = _dbContext.Districts.Find(district).name;
+                PartyResultViewModel partyResult = new PartyResultViewModel();
+                partyResult.name = party.name;
+                partyResult.logo = party.logo;
+                partyResult.candidate = party.candidate;
 
-            return View(results);
+                VoteResultSearchModel searchModel = new VoteResultSearchModel
+                {
+                    arrDistricts = arrDistricts,
+                    party = party.id
+                };
+                Message<VoteResult> response = await client.GetResult(searchModel);
+
+                if (response.IsSuccess)
+                {
+                    VoteResult results = (VoteResult)response.Data;
+                    partyResult.registerdVoter = results.registerdVoter;
+                    partyResult.vote = results.vote;
+                }
+
+                //calculate percent
+                if (partyResult.registerdVoter != 0)
+                    partyResult.percent = partyResult.vote * 100 / (float)partyResult.registerdVoter;
+
+                arrResults.Add(partyResult);
+            }
+
+            return View(arrResults);
         }
 
         [Authorize(Roles = Global.ROLE_SUPERVISOR)]
@@ -123,33 +153,38 @@ namespace Election.Controllers
         [Authorize(Roles = Global.ROLE_VOTER)]
         public IActionResult Voter()
         {
+            VoteViewModel resultModel = new VoteViewModel();
+
             VoterModel voter = new VoterModel();
             voter.username = User.FindFirst("username").Value;
             voter.userid = User.FindFirst("userid").Value;
             voter.nic = User.FindFirst("nic").Value;
             voter.address = User.FindFirst("address").Value;
             voter.district = Convert.ToInt32(User.FindFirst("district").Value);
+            resultModel.voter = voter;
+            resultModel.arrPary = _dbContext.Parties.ToList();
 
             ElectionDistrictModel electionDistrict = _dbContext.Districts.Find(voter.district);
             ProvinceModel province = _dbContext.Provinces.Find(electionDistrict.province);
-
-            ViewData["district"] = electionDistrict.name;
-            ViewData["province"] = province.name;
-
+            resultModel.district = electionDistrict.name;
+            resultModel.province = province.name;
+            
+            /*
             PartyModel party = _dbContext.Parties.Find(electionDistrict.party);
             ViewData["partyName"] = party.name;
             ViewData["partyLogo"] = party.logo;
             ViewData["partyCandidate"] = party.candidate;
-
-            return View(voter);
+            */
+            return View(resultModel);
         }
         //Vote
-        public async Task<bool> Vote(int state)
+        public async Task<bool> Vote(int party)
         {
             Vote_Model voteModel = new Vote_Model();
             voteModel.userid = User.FindFirst("userid").Value;
             voteModel.district = Convert.ToInt32(User.FindFirst("district").Value);
-            voteModel.state = state;
+            voteModel.state = 3;
+            voteModel.party = party;
 
             VoterApiClient client = new VoterApiClient();
             Message<int> response = await client.Vote(voteModel);

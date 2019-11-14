@@ -10,6 +10,5 @@ namespace Election.Models
         public int id { get; set; }
         public string name { get; set; }
         public int province { get; set; }
-        public int? party { get; set; }
     }
 }

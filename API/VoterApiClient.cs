@@ -16,11 +16,11 @@ namespace Election.API
         }
 
         //Get Election Result in a district
-        public async Task<Message<VoteResult>> GetResult(int district)
+        public async Task<Message<VoteResult>> GetResult(VoteResultSearchModel searchModel)
         {
-            var requestUrl = CreateRequestUri(Global.API_GET_RESULT, "district=" + district);
-            return await GetAsync<VoteResult>(requestUrl);
-            //return await PostAsync<VoteResult, int>(requestUrl, district);
+            var requestUrl = CreateRequestUri(Global.API_GET_RESULT);
+            //return await GetAsync<VoteResult>(requestUrl);
+            return await PostAsync<VoteResult, VoteResultSearchModel>(requestUrl, searchModel);
         }
 
         //Search Voter, This is used in login

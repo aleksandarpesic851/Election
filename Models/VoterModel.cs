@@ -15,5 +15,6 @@ namespace Election.Models
         public int district { get; set; }
         public int province { get; set; }
         public int vote_state { get; set; }
+        public int party { get; set; }
     }
 }
